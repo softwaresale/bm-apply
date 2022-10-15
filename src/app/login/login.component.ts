@@ -1,12 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthProvider, GoogleAuthProvider, GithubAuthProvider, OAuthProvider } from 'firebase/auth';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, of } from 'rxjs';
+import { catchError, map, take } from 'rxjs/operators';
+import { BMProfile, partialToNullableProfile } from '../models/profile.model';
 
 interface ProviderInfo {
   name: string;
@@ -44,6 +46,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private readonly auth: AngularFireAuth,
+    private readonly firestore: AngularFirestore,
     private readonly fb: FormBuilder,
     private readonly router: Router,
     private readonly snackBar: MatSnackBar,
@@ -72,7 +75,25 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  async logInWithProvider(provider: AuthProvider) {
-    await this.auth.signInWithRedirect(provider);
+  logInWithProvider(provider: AuthProvider) {
+    from(this.auth.signInWithPopup(provider))
+        .pipe(
+          map(newAuthCredential => ({ authCred: newAuthCredential, userDoc: this.firestore.collection<BMProfile>('/users').doc(newAuthCredential.user?.uid) })),
+          take(1),
+          catchError(err => {
+            console.log(err);
+            this.snackBar.open('Could not create account', 'Dismiss');
+            return of();
+          }),
+        )
+        .subscribe(async ({ authCred, userDoc }) => {
+          const knownInfoPartial: Partial<BMProfile> = {
+            uid: authCred.user?.uid,
+            email: authCred.user?.email ?? undefined,
+          };
+          const knownInfo = partialToNullableProfile(knownInfoPartial);
+          await userDoc.set(knownInfo);
+          await this.router.navigate(['/apply']);
+        });
   }
 }
