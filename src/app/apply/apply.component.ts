@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -12,6 +12,14 @@ import { BMApplication, BMApplicationStatus, partialToNullabelBMApplication } fr
 import { BMProfile, partialToNullableProfile } from '../models/profile.model';
 
 type ResumeFileState = 'unselected' | 'selected' | 'uploaded';
+
+export const isAtLeastNow: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const yearString = control.value;
+  const yearNum = +yearString;
+  const THIS_YEAR = 2022; // TODO: bad!!
+
+  return yearNum < THIS_YEAR ? { invalidYear: true } : null;
+};
 
 @Component({
   selector: 'app-apply',
@@ -39,10 +47,10 @@ export class ApplyComponent implements OnInit {
     gender: [''],
     major: ['', [Validators.required]],
     university: ['', [Validators.required]],
-    gradYear: ['', [Validators.required]],
+    gradYear: ['', [Validators.required, Validators.maxLength(4), Validators.minLength(4), isAtLeastNow]],
     github: [''],
     linkedIn: [''],
-    resumeId: ['', [Validators.required]], // This does not link to a form control. This gets set manually
+    resumeId: [<string|null> null, [Validators.required]], // This does not link to a form control. This gets set manually
   });
 
   bmAppForm = this.fb.group({
@@ -79,7 +87,8 @@ export class ApplyComponent implements OnInit {
   }
 
   get resumeRecieved(): boolean {
-    return this.profileForm.controls.resumeId !== null;
+    const resume = this.profileForm.controls.resumeId;
+    return resume.value !== null && resume.value.length > 0;
   }
 
   constructor(

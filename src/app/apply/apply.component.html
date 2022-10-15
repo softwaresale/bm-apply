@@ -49,6 +49,9 @@
                         <mat-label>Graduation Year</mat-label>
                         <input matInput formControlName="gradYear">
                         <mat-error *ngIf="profileForm.hasError('required', 'gradYear')">Required field</mat-error>
+                        <mat-error *ngIf="profileForm.hasError('maxLength', 'gradYear')">Must be 4 chars</mat-error>
+                        <mat-error *ngIf="profileForm.hasError('minLength', 'gradYear')">Must be 4 chars</mat-error>
+                        <mat-error *ngIf="profileForm.hasError('invalidYear', 'gradYear')">Must be at least this year</mat-error>
                     </mat-form-field>
                 </div>
                 <mat-divider></mat-divider>
