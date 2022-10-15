@@ -1,0 +1,21 @@
+
+<div class="dashboard__container">
+    <h1>Your Dashboard</h1>
+    <div *ngIf="(profile$ | async) as profile">
+        <h2>Hello, {{ profile.firstName }} {{profile.lastName }}</h2>
+    </div>
+    <div *ngIf="(application$ | async) as application; else noApplication" class="dashboard__application-status">
+        <h2>Your application status: {{ application.status | titlecase }}</h2>
+        <a mat-raised-button color="primary" [routerLink]="['/apply']">View Your Application</a>
+    </div>
+    <div class="dashboard__account-actions">
+        <button mat-raised-button color="warn" (click)="logout()">Log Out</button>
+    </div>
+</div>
+
+<ng-template #noApplication>
+    <div class="dashboard__application-status">
+        <h2>It looks there you haven't applied yet!</h2>
+        <a mat-raised-button color="primary" [routerLink]="['/apply']">Apply Now</a>
+    </div>
+</ng-template>

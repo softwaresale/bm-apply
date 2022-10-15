@@ -1,0 +1,23 @@
+
+<div class="signup__container">
+    <form [formGroup]="signupForm" class="signup__form" [class.signup__form__mobile]="isMobile$ | async">
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+            <mat-error *ngIf="signupForm.hasError('required', 'email')">Required Field</mat-error>
+            <mat-error *ngIf="signupForm.hasError('email', 'email')">Must be a valid email</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password">
+            <mat-error *ngIf="signupForm.hasError('required', 'password')">Required Field</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword">
+            <mat-error *ngIf="signupForm.hasError('required', 'confirmPassword')">Required Field</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="signUp()" [disabled]="signupForm.invalid">Sign Up</button>
+    </form>
+    <mat-error *ngIf="signupForm.hasError('passwordMatch')" style="margin-top: 8px;">Passwords must match</mat-error>
+</div>

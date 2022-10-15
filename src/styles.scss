@@ -1,1 +1,177 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+$bm-brown: (
+  50 : #eae2e1,
+  100 : #ccb8b5,
+  200 : #aa8884,
+  300 : #875853,
+  400 : #6e352e,
+  500 : #541109,
+  600 : #4d0f08,
+  700 : #430c06,
+  800 : #3a0a05,
+  900 : #290502,
+  A100 : #ff6a63,
+  A200 : #ff3930,
+  A400 : #fc0b00,
+  A700 : #e30a00,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #ffffff,
+      400 : #ffffff,
+      500 : #ffffff,
+      600 : #ffffff,
+      700 : #ffffff,
+      800 : #ffffff,
+      900 : #ffffff,
+      A100 : #000000,
+      A200 : #ffffff,
+      A400 : #ffffff,
+      A700 : #ffffff,
+  )
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+$bm-yellow: (
+  50 : #fef5ea,
+  100 : #fce6ca,
+  200 : #fad6a7,
+  300 : #f8c583,
+  400 : #f7b869,
+  500 : #f5ac4e,
+  600 : #f4a547,
+  700 : #f29b3d,
+  800 : #f09235,
+  900 : #ee8225,
+  A100 : #ffffff,
+  A200 : #fff9f5,
+  A400 : #ffddc2,
+  A700 : #ffcea8,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #000000,
+      400 : #000000,
+      500 : #000000,
+      600 : #000000,
+      700 : #000000,
+      800 : #000000,
+      900 : #000000,
+      A100 : #000000,
+      A200 : #000000,
+      A400 : #000000,
+      A700 : #000000,
+  )
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+$bm-purple: (
+  50 : #e9e0ed,
+  100 : #c8b3d1,
+  200 : #a480b3,
+  300 : #7f4d94,
+  400 : #63267d,
+  500 : #480066,
+  600 : #41005e,
+  700 : #380053,
+  800 : #300049,
+  900 : #210038,
+  A100 : #b76eff,
+  A200 : #9d3bff,
+  A400 : #8408ff,
+  A700 : #7700ee,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #ffffff,
+      400 : #ffffff,
+      500 : #ffffff,
+      600 : #ffffff,
+      700 : #ffffff,
+      800 : #ffffff,
+      900 : #ffffff,
+      A100 : #000000,
+      A200 : #ffffff,
+      A400 : #ffffff,
+      A700 : #ffffff,
+  )
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+$bm-blue: (
+  50 : #e4e5ea,
+  100 : #bcbfcb,
+  200 : #9094a8,
+  300 : #646985,
+  400 : #42496a,
+  500 : #212950,
+  600 : #1d2449,
+  700 : #181f40,
+  800 : #141937,
+  900 : #0b0f27,
+  A100 : #6574ff,
+  A200 : #3246ff,
+  A400 : #0018fe,
+  A700 : #0016e5,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #ffffff,
+      400 : #ffffff,
+      500 : #ffffff,
+      600 : #ffffff,
+      700 : #ffffff,
+      800 : #ffffff,
+      900 : #ffffff,
+      A100 : #ffffff,
+      A200 : #ffffff,
+      A400 : #ffffff,
+      A700 : #ffffff,
+  )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$bm-apply-primary: mat.define-palette($bm-blue, 400);
+$bm-apply-accent: mat.define-palette($bm-purple, 400, 500, 600);
+
+$bm-apply-alternate-primary: mat.define-palette($bm-brown, 400);
+$bm-apply-alternate-accent: mat.define-palette($bm-yellow, 400, 500, 600);
+
+// The warn palette is optional (defaults to red).
+$bm-apply-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$bm-apply-theme: mat.define-light-theme((
+  color: (
+    primary: $bm-apply-primary,
+    accent: $bm-apply-accent,
+    warn: $bm-apply-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($bm-apply-theme);
+
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; box-sizing: border-box; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

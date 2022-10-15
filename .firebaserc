@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "bm-apply-test": {
+      "hosting": {
+        "bm-apply": [
+          "bm-apply-test"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "bm-apply-test"
+  }
+}

@@ -1,0 +1,45 @@
+
+.login__container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    align-items: center;
+}
+
+.login__form {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+.login__form__mobile {
+    @extend .login__form;
+    width: 100%;
+}
+
+.login__action-btn-box {
+    display: flex;
+    flex-direction: column;
+
+    button {
+        margin-bottom: 8px;
+    }
+
+    button:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.login__provider-btn-box {
+    display: flex;
+    margin-top: 32px;
+    justify-content: center;
+
+    button {
+        margin-right: 8px;
+    }
+
+    button:last-child {
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,120 @@
+
+<div class="apply__container" [class.apply__container__mobile]="isMobile$ | async">
+    <h1>Boilermake Application</h1>
+    <mat-stepper [linear]="isLinear$ | async" #applicationStepper
+        class="apply__stepper" [class.apply__stepper__mobile]="isMobile$ | async">
+        <mat-step label="Profile Info" [stepControl]="profileForm">
+            <form [formGroup]="profileForm" class="apply__form">
+                <div class="apply__form-subgroup">
+                    <h3>Personal Info</h3>
+                    <div class="apply__form-subgroup__name-group">
+                        <mat-form-field>
+                            <mat-label>First Name</mat-label>
+                            <input matInput formControlName="firstName">
+                            <mat-error *ngIf="profileForm.hasError('required', 'firstName')">Required field</mat-error>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Last Name</mat-label>
+                            <input matInput formControlName="lastName">
+                            <mat-error *ngIf="profileForm.hasError('required', 'lastName')">Required field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <mat-form-field>
+                        <mat-label>Gender</mat-label>
+                        <input matInput formControlName="gender">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Phone</mat-label>
+                        <input matInput formControlName="phone">
+                        <mat-error *ngIf="profileForm.hasError('pattern', 'phone')">Invalid phone</mat-error>
+                    </mat-form-field>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="apply__form-subgroup">
+                    <h3>Education</h3>
+                    <mat-form-field>
+                        <mat-label>University</mat-label>
+                        <input matInput formControlName="university">
+                        <mat-error *ngIf="profileForm.hasError('required', 'university')">Required field</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Major</mat-label>
+                        <input matInput [matAutocomplete]="majorAutocomplete" formControlName="major">
+                        <mat-autocomplete #majorAutocomplete="matAutocomplete">
+                            <mat-option *ngFor="let major of recommendedMajors" [value]="major">{{ major }}</mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="profileForm.hasError('required', 'major')">Required field</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Graduation Year</mat-label>
+                        <input matInput formControlName="gradYear">
+                        <mat-error *ngIf="profileForm.hasError('required', 'gradYear')">Required field</mat-error>
+                    </mat-form-field>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="apply__form-subgroup">
+                    <h3>Contact Info</h3>
+                    <mat-form-field>
+                        <mat-label>GitHub</mat-label>
+                        <input matInput formControlName="github">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>LinkedIn</mat-label>
+                        <input matInput formControlName="linkedIn">
+                    </mat-form-field>
+                </div>
+                <mat-divider></mat-divider>
+                <h3>Resume Upload</h3>
+                <div class="apply__resume-upload">
+                    <div class="apply__resume-controls">
+                        <ng-container [ngSwitch]="resumeState">
+                            <button mat-flat-button *ngSwitchCase="'unselected'" color="accent" (click)="fileUpload.click()">Select Resume</button>
+                            <button mat-flat-button *ngSwitchCase="'selected'" color="accent" (click)="uploadResume()">Upload</button>
+                            <button mat-flat-button *ngSwitchCase="'uploaded'" color="accent" (click)="fileUpload.click()">Change File</button>
+                        </ng-container>
+                        <ng-template #uploadResumeBtn>
+                        </ng-template>
+                        <ng-template #selectResumeBtn>
+                        </ng-template>
+                        <input #fileUpload hidden type="file" class="file-upload" (change)="setResumeUpload($event)">
+                        <p *ngIf="resumeRecieved">Resume Recieved <mat-icon>check</mat-icon></p>
+                        <p *ngIf="resumeFileTitle">{{ resumeFileTitle }}</p>
+                        <p *ngIf="!(resumeRecieved || resumeFileTitle)">Please select a resume file</p>
+                    </div>
+                    <mat-progress-bar *ngIf="uploadPercent$" [value]="(uploadPercent$ | async)"></mat-progress-bar>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="apply__action-btn-box">
+                    <button mat-raised-button matStepperNext color="primary" [disabled]="profileForm.invalid" (click)="submitProfileForm()">Next</button>
+                    <button mat-stroked-button color="accent" (click)="saveProfileProgress()">Save and Exit</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step label="Boilermake Application" [stepControl]="bmAppForm">
+            <form [formGroup]="bmAppForm" class="apply__form">
+                <mat-form-field>
+                    <mat-label>Why are you interested in boilermake?</mat-label>
+                    <textarea matInput formControlName="whyBoilermake" rows="30"></textarea>
+                    <mat-hint>{{ whyBMCharCount }}/4000</mat-hint>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>What project ideas do you have?</mat-label>
+                    <textarea matInput formControlName="projectIdeas" rows="30"></textarea>
+                    <mat-hint>{{ projectIdeaCharCount }}/4000</mat-hint>
+                </mat-form-field>
+                <mat-divider></mat-divider>
+                <div class="apply_checkboxes">
+                    <mat-checkbox (change)="updateFirstHackathon($event)" [checked]="bmAppForm.controls.isFirstHackathon.value ?? false">This is my first hackathon</mat-checkbox>
+                    <mat-checkbox (change)="updateAgreement($event)" [checked]="bmAppForm.controls.agreeToTOC.value ?? false">I agree to Boilermake's terms</mat-checkbox>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="apply__action-btn-box">
+                    <button mat-raised-button color="primary" [disabled]="bmAppForm.invalid" (click)="submitBMApp()">
+                        {{ bmAppForm.disabled ? 'Return to Dashboard' : 'Submit' }}
+                    </button>
+                    <button mat-stroked-button color="accent" (click)="saveBMProgress()">Save and Exit</button>
+                </div>
+            </form>
+        </mat-step>
+    </mat-stepper>
+</div>

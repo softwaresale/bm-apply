@@ -1,0 +1,22 @@
+
+.signup__container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    align-items: center;
+}
+
+.signup__form {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+
+    button {
+        margin-top: 16px;
+    }
+}
+
+.signup__form__mobile {
+    @extend .signup__form;
+    width: 100%;
+}

@@ -1,0 +1,26 @@
+
+<div class="login__container">
+    <form [formGroup]="loginForm" class="login__form" [class.login__form__mobile]="isMobile$ | async">
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password">
+        </mat-form-field>
+        <div class="login__action-btn-box">
+            <button mat-raised-button color="primary" (click)="passwordLogin()" [disabled]="loginForm.invalid">
+                Login
+            </button>
+            <a mat-stroked-button color="accent" [routerLink]="['signup']">
+                Register
+            </a>
+        </div>
+        <div class="login__provider-btn-box">
+            <button mat-raised-button *ngFor="let provider of providers" (click)="logInWithProvider(provider.provider)">
+                {{ provider.name }}
+            </button>
+        </div>
+    </form>
+</div>
