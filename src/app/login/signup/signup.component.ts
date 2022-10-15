@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { catchError, from, map, of, switchMap, take } from 'rxjs';
 import { BMProfile, partialToNullableProfile } from 'src/app/models/profile.model';
 
-/** A hero's name can't match the hero's alter ego */
 export const passwordChecker: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const password = control.get('password');
   const confirm = control.get('confirmPassword');

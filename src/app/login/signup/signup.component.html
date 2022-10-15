@@ -18,6 +18,7 @@
             <mat-error *ngIf="signupForm.hasError('required', 'confirmPassword')">Required Field</mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" (click)="signUp()" [disabled]="signupForm.invalid">Sign Up</button>
+        <a mat-stroked-button color="accent" [routerLink]="['/login']" style="margin-top: 8px;">Login</a>
     </form>
     <mat-error *ngIf="signupForm.hasError('passwordMatch')" style="margin-top: 8px;">Passwords must match</mat-error>
 </div>
