@@ -8,11 +8,14 @@ import { ApplicationListComponent } from './application-list/application-list.co
 import { ApplicationViewComponent } from './application-view/application-view.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from "@angular/material/table";
+import { StatusChipComponent } from './application-list/status-chip/status-chip.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 const MAT_MODULES = [
   MatToolbarModule,
   MatButtonModule,
   MatTableModule,
+  MatChipsModule,
 ];
 
 @NgModule({
@@ -20,6 +23,7 @@ const MAT_MODULES = [
     AdminComponent,
     ApplicationListComponent,
     ApplicationViewComponent,
+    StatusChipComponent,
   ],
   imports: [
     CommonModule,

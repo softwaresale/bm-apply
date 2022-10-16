@@ -1,1 +1,15 @@
-<p>application-view works!</p>
+
+<div>
+    <h1>Application</h1>
+    <div *ngIf="(application$ | async) as application">
+        <ng-container *ngFor="let field of application | keyvalue">
+            <h3>{{ field.key }}</h3>
+            <p>{{ field.value }}</p>
+        </ng-container>
+    </div>
+    <div>
+        <button mat-raised-button color="primary" (click)="updateApplicationStatus('accepted')">Accept</button>
+        <button mat-flat-button color="accent" (click)="updateApplicationStatus('waitlisted')">Waitlist</button>
+        <button mat-stroked-button color="warn" (click)="updateApplicationStatus('rejected')">Reject</button>
+    </div>
+</div>

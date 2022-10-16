@@ -10,6 +10,15 @@ import { BMProfile } from 'src/app/models/profile.model';
 })
 export class ApplicationListComponent implements OnInit {
 
+  columns = [
+    'name',
+    'university',
+    'major',
+    'gradYear',
+    'status',
+    'view',
+  ];
+
   applications$!: Observable<BMFullApplication[]>;
 
   constructor(
@@ -17,13 +26,13 @@ export class ApplicationListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.applications$ = this.firestore.collection<BMApplication>('/applications', ref => ref.where('status', '==', 'submitted')).valueChanges()
+    this.applications$ = this.firestore.collection<BMApplication>('/applications', ref => ref.where('status', '!=', 'unsubmitted')).valueChanges()
       .pipe(
         map(applications => applications.map(app => this.firestore.doc<BMProfile>(`/users/${app.userId}`).valueChanges().pipe(
           map(user => partialToNullableBMFullApplication(user!, app))
         ))),
-        switchMap(observables => combineLatest(observables))
+        switchMap(observables => combineLatest(observables)),
+        map(allApplications => allApplications.sort((left, right) => left.status === 'submitted' ? 1 : -1))
       );
   }
-
 }

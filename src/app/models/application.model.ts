@@ -4,6 +4,7 @@ import { BMProfile, partialToNullableProfile } from './profile.model';
 export type BMApplicationStatus = 'unsubmitted' | 'submitted' | 'accepted' | 'rejected' | 'waitlisted';
 
 export interface BMApplication {
+    id: string | null;
     userId: string | null;
     whyBoilermake: string | null;
     projectIdeas: string | null;
@@ -13,6 +14,7 @@ export interface BMApplication {
 }
 
 export const partialToNullabelBMApplication = (partial: Partial<BMApplication>): BMApplication => ({
+    id: partial?.id ?? null,
     userId: partial?.userId ?? null,
     whyBoilermake: partial?.whyBoilermake ?? null,
     projectIdeas: partial?.projectIdeas ?? null,
