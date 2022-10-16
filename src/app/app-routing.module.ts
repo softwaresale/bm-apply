@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { canActivate, redirectUnauthorizedTo } from '@angular/fire/compat/auth-guard';
+import { canActivate, redirectUnauthorizedTo, hasCustomClaim } from '@angular/fire/compat/auth-guard';
 import { RouterModule, Routes } from '@angular/router';
 
 const redirectToLoginPage = () => redirectUnauthorizedTo('/login');
+const isAdmin = () => hasCustomClaim('admin');
 
 const routes: Routes = [
   {
@@ -20,11 +21,15 @@ const routes: Routes = [
     ...canActivate(redirectToLoginPage)
   },
   {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    ...canActivate(isAdmin),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: '/dashboard',
   },
-  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
 ];
 
 @NgModule({
