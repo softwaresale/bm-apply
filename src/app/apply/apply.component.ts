@@ -117,8 +117,9 @@ export class ApplyComponent implements OnInit {
         switchMap(authState => this.firestore.collection<BMApplication>('/applications', ref => ref.where('userId', '==', authState.uid)).get().pipe(
           switchMap(async docRef => {
             if (docRef.empty) {
-              const application = partialToNullabelBMApplication({ userId: authState.uid });
-              const doc = this.firestore.collection<BMApplication>('/applications').doc(this.firestore.createId());
+              const applicationId = this.firestore.createId();
+              const application = partialToNullabelBMApplication({ userId: authState.uid, id: applicationId });
+              const doc = this.firestore.collection<BMApplication>('/applications').doc(applicationId);
               await doc.set(application);
               return doc;
             } else {
@@ -148,7 +149,7 @@ export class ApplyComponent implements OnInit {
       .subscribe(appUpdate => {
         if (appUpdate) {
           this.bmAppForm.patchValue(appUpdate);
-          if (appUpdate.status === 'submitted') {
+          if (appUpdate.status !== 'unsubmitted') {
             this.profileForm.disable();
             this.bmAppForm.disable();
           }
