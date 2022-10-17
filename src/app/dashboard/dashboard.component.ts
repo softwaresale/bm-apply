@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { filter, from, map, Observable, of, switchMap } from 'rxjs';
 import { BMApplication } from '../models/application.model';
 import { BMProfile } from '../models/profile.model';
 
@@ -15,6 +15,8 @@ export class DashboardComponent implements OnInit {
 
   profile$: Observable<BMProfile> = of();
   application$: Observable<BMApplication | null> = of(null);
+
+  isAdmin$ = of(false);
 
   constructor(
     private readonly auth: AngularFireAuth,
@@ -34,6 +36,13 @@ export class DashboardComponent implements OnInit {
         switchMap(user => this.firestore.collection<BMApplication>('/applications', ref => ref.where('userId', '==', user?.uid)).valueChanges()),
         map(apps => apps.length > 0 ? apps[0] : null)
       );
+
+    this.isAdmin$ = this.auth.authState.pipe(
+      filter(authState => !!authState),
+      map(authState => authState!),
+      switchMap(authState => from(authState?.getIdTokenResult())),
+      map(idToken => !!idToken.claims['admin'])
+    );
   }
 
   async logout() {

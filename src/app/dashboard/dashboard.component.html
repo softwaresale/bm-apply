@@ -8,6 +8,9 @@
         <h2>Your application status: {{ application.status | titlecase }}</h2>
         <a mat-raised-button color="primary" [routerLink]="['/apply']">View Your Application</a>
     </div>
+    <div *ngIf="isAdmin$ | async" class="dashboard__account-actions">
+        <a mat-raised-button color="accent" [routerLink]="['/admin', 'applications']">View applications list</a>
+    </div>
     <div class="dashboard__account-actions">
         <button mat-raised-button color="warn" (click)="logout()">Log Out</button>
     </div>
