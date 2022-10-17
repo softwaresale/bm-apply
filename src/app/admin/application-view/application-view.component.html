@@ -1,13 +1,31 @@
 
-<div>
-    <h1>Application</h1>
-    <div *ngIf="(application$ | async) as application">
-        <ng-container *ngFor="let field of application | keyvalue">
-            <h3>{{ field.key }}</h3>
-            <p>{{ field.value }}</p>
-        </ng-container>
+<div class="application-view__container">
+    <div *ngIf="(application$ | async) as application" class="application-view__app">
+        <h1>{{ application.firstName }} {{ application.lastName }} Application</h1>
+        <div>
+            <h2>Personal Info</h2>
+            <h3>Gender: {{ application.gender }}</h3>
+            <h3>Is first hackathon: {{ application.isFirstHackathon ? 'Yes!' : 'No' }}</h3>
+        </div>
+        <div>
+            <h2>Education</h2>
+            <h3>University: {{ application.university }}</h3>
+            <h3>Major: {{ application.major }}</h3>
+            <h3>Grad Year: {{ application.gradYear }}</h3>
+        </div>
+        <div>
+            <h2>Application Responses</h2>
+            <h3>Why Boilermake?</h3>
+            <p>
+                {{ application.whyBoilermake }}
+            </p>
+            <h3>Project Ideas</h3>
+            <p>
+                {{ application.projectIdeas }}
+            </p>
+        </div>
     </div>
-    <div>
+    <div class="application-view__actions-box">
         <button mat-raised-button color="primary" (click)="updateApplicationStatus('accepted')">Accept</button>
         <button mat-flat-button color="accent" (click)="updateApplicationStatus('waitlisted')">Waitlist</button>
         <button mat-stroked-button color="warn" (click)="updateApplicationStatus('rejected')">Reject</button>
